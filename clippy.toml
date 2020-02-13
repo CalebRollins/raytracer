@@ -1,0 +1,3 @@
+#[warn(clippy::pedantic)]
+#![deny(dead_code)]
+#[warn(clippy::needless_pass_by_value)]

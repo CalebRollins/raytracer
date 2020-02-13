@@ -4,30 +4,42 @@ use std::ops::{
 
 // TODO: Consider three separate variables instead of an array
 pub struct Vec3 {
-    pub e: [f32; 3],
+    e: [f32; 3],
 }
 
 impl Vec3 {
-    fn vec3() -> Self {
+    pub fn new(x: f32, y: f32, z: f32) -> Self {
+        Vec3 { e: [x, y, z] }
+    }
+
+    pub fn zero() -> Self {
         Vec3 { e: [0.0, 0.0, 0.0] }
     }
 
-    fn x(&self) -> f32 {
+    pub fn one() -> Self {
+        Vec3 { e: [1.0, 1.0, 1.0] }
+    }
+
+    pub fn x(&self) -> f32 {
         self.e[0]
     }
-    fn y(&self) -> f32 {
+
+    pub fn y(&self) -> f32 {
         self.e[1]
     }
-    fn z(&self) -> f32 {
+
+    pub fn z(&self) -> f32 {
         self.e[2]
     }
 
     pub fn r(&self) -> f32 {
         self.e[0]
     }
+
     pub fn g(&self) -> f32 {
         self.e[1]
     }
+
     pub fn b(&self) -> f32 {
         self.e[2]
     }
@@ -47,7 +59,7 @@ impl Vec3 {
         self.e[2] *= k;
     }
 
-    fn dot(&self, other: &Self) -> f32 {
+    pub fn dot(&self, other: &Self) -> f32 {
         self.x() * other.x() + self.y() * other.y() + self.z() * other.z()
     }
 
@@ -61,7 +73,7 @@ impl Vec3 {
         }
     }
 
-    fn unit_vector(&self) -> Self {
+    pub fn unit_vector(&self) -> Self {
         self / self.length()
     }
 
@@ -79,9 +91,7 @@ impl Vec3 {
 
 impl Clone for Vec3 {
     fn clone(&self) -> Self {
-        Self {
-            e: [self.x(), self.y(), self.z()],
-        }
+        Self::new(self.x(), self.y(), self.z()) 
     }
 }
 
@@ -109,7 +119,7 @@ impl IndexMut<usize> for Vec3 {
     }
 }
 
-impl Add for &Vec3 {
+impl Add for Vec3 {
     type Output = Vec3;
     fn add(self, other: Self) -> Self::Output {
         Vec3 {
@@ -130,7 +140,7 @@ impl AddAssign<&Self> for Vec3 {
     }
 }
 
-impl Sub for &Vec3 {
+impl Sub for Vec3 {
     type Output = Vec3;
     fn sub(self, other: Self) -> Self::Output {
         Vec3 {
@@ -151,25 +161,28 @@ impl SubAssign<&Self> for Vec3 {
     }
 }
 
-impl Mul<Self> for &Vec3 {
+impl Mul<Self> for Vec3 {
     type Output = Vec3;
     fn mul(self, other: Self) -> Self::Output {
-        Vec3 {
-            e: [
-                self.x() * other.x(),
-                self.y() * other.y(),
-                self.z() * other.z(),
-            ],
-        }
+        Vec3::new(self.x() * other.x(), self.y() * other.y(), self.z() * other.z())
     }
 }
 
-impl Mul<f32> for &Vec3 {
+fn vec_mul_by_f32(v: &Vec3, t: f32) -> Vec3 {
+	Vec3::new(v.x() * t, v.y() * t, v.z() * t)
+}
+
+impl Mul<f32> for Vec3 {
     type Output = Vec3;
     fn mul(self, t: f32) -> Self::Output {
-        Vec3 {
-            e: [self.x() * t, self.y() * t, self.z() * t],
-        }
+		vec_mul_by_f32(&self, t)
+    }
+}
+
+impl Mul<Vec3> for f32 {
+    type Output = Vec3;
+    fn mul(self, v: Vec3) -> Self::Output {
+		vec_mul_by_f32(&v, self)
     }
 }
 
