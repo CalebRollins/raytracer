@@ -6,11 +6,14 @@ pub struct Ray {
 }
 
 impl Ray {
-	pub fn new(origin: &Vec3, direction: &Vec3) -> Self {
-		Ray { origin: origin.clone(), direction: direction.clone() }
-	}
+    pub fn new(origin: &Vec3, direction: &Vec3) -> Self {
+        Ray {
+            origin: origin.clone(),
+            direction: direction.clone(),
+        }
+    }
 
-    fn point_at_parameter(&self, t: f32) -> Vec3 {
+    pub fn point_at_parameter(&self, t: f32) -> Vec3 {
         // TODO: Is this idiomatic?
         self.origin.clone() + self.direction.clone() * t
     }
