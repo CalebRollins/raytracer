@@ -224,8 +224,8 @@ impl DivAssign<&Self> for Vec3 {
 impl DivAssign<f32> for Vec3 {
     fn div_assign(&mut self, t: f32) {
         let k = 1.0 / t;
-        self[0] /= k;
-        self[1] /= k;
-        self[2] /= k;
+        self[0] *= k;
+        self[1] *= k;
+        self[2] *= k;
     }
 }
