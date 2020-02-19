@@ -5,7 +5,7 @@ use crate::ray;
 #[derive(Copy, Clone)]
 pub struct HitRecord {
     t: f32,
-    p: Vec3,
+    pub p: Vec3,
     pub normal: Vec3,
 }
 

@@ -56,7 +56,8 @@ fn main() {
 				col += &color(&r, Box::new(&world));
 			}
 
-            col /= ns as f32;
+			col /= ns as f32;
+			col = Vec3::new(col.r().sqrt(), col.g().sqrt(), col.b().sqrt());
             let ir = (255.99 * col.r()) as i32;
             let ig = (255.99 * col.g()) as i32;
             let ib = (255.99 * col.b()) as i32;
@@ -66,12 +67,9 @@ fn main() {
 }
 
 fn color(r: &ray::Ray, world: Box<&dyn Hittable>) -> Vec3 {
-    return if let Some(temp_rec) = world.hit(r, 0.0, std::f32::MAX) {
-        0.5 * Vec3::new(
-            temp_rec.normal.x() + 1.0,
-            temp_rec.normal.y() + 1.0,
-            temp_rec.normal.z() + 1.0,
-        )
+    return if let Some(rec) = world.hit(r, 0.001, std::f32::MAX) {
+		let target = rec.p + rec.normal + Vec3::random_in_unit_sphere();
+		0.5 * color(&Ray { origin: rec.p, direction: target - rec.p }, world)
     } else {
         let unit_direction = Vec3::unit_vector(&r.direction);
         let t = 0.5 * (unit_direction.y() + 1.0);
