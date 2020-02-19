@@ -162,11 +162,7 @@ impl Mul<Self> for Vec3 {
 }
 
 fn vec_mul_by_f32(v: &Vec3, t: f32) -> Vec3 {
-    Vec3::new(
-		v.x() * t,
-		v.y() * t,
-		v.z() * t
-	)
+    Vec3::new(v.x() * t, v.y() * t, v.z() * t)
 }
 
 impl Mul<f32> for Vec3 {
@@ -203,22 +199,18 @@ impl Div<Self> for Vec3 {
     type Output = Self;
     fn div(self, other: Self) -> Self::Output {
         Vec3::new(
-			self.x() / other.x(),
-			self.y() / other.y(),
-			self.z() / other.z(),
-		)
+            self.x() / other.x(),
+            self.y() / other.y(),
+            self.z() / other.z(),
+        )
     }
 }
 
 impl Div<f32> for Vec3 {
     type Output = Self;
-    fn div(self, t: f32) -> Self::Output {  
-        Vec3::new( 
-			self.x() / t, 
-			self.y() / t,
-			self.z() / t,
-		)
-	}
+    fn div(self, t: f32) -> Self::Output {
+        Vec3::new(self.x() / t, self.y() / t, self.z() / t)
+    }
 }
 
 impl DivAssign<&Self> for Vec3 {
