@@ -1,12 +1,14 @@
+use super::material::{Lambertian, Material};
 use super::ray::Ray;
 use super::vec3::Vec3;
-use crate::ray;
+// use crate::ray;
 
-#[derive(Copy, Clone)]
+// #[derive(Clone)]
 pub struct HitRecord {
     t: f32,
     pub p: Vec3,
     pub normal: Vec3,
+    pub material: Box<dyn Material>,
 }
 
 impl HitRecord {
@@ -15,6 +17,7 @@ impl HitRecord {
             t: 0.0,
             p: Vec3::zero(),
             normal: Vec3::zero(),
+            material: Material::new(),
         }
     }
 }
@@ -28,7 +31,7 @@ pub struct HittableList {
 }
 
 impl Hittable for HittableList {
-    fn hit(&self, r: &ray::Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn hit(&self, r: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let mut hit_record = None;
         let mut closest_so_far = t_max;
 
@@ -46,10 +49,11 @@ impl Hittable for HittableList {
 pub struct Sphere {
     pub center: Vec3,
     pub radius: f32,
+    pub material: Box<dyn Material>,
 }
 
 impl Hittable for Sphere {
-    fn hit(&self, r: &ray::Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
+    fn hit(&self, r: &Ray, t_min: f32, t_max: f32) -> Option<HitRecord> {
         let mut hit_record = HitRecord::zero();
         let oc = r.origin - self.center;
         let a = Vec3::dot(&r.direction, &r.direction);
@@ -62,6 +66,7 @@ impl Hittable for Sphere {
                 hit_record.t = temp;
                 hit_record.p = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.p - self.center) / self.radius;
+                hit_record.material = Material::new(); // TODO: Figure out how to copy trait or something
                 return Some(hit_record);
             }
             let temp = (-b + discriminant.sqrt()) / a;
@@ -69,6 +74,7 @@ impl Hittable for Sphere {
                 hit_record.t = temp;
                 hit_record.p = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.p - self.center) / self.radius;
+                hit_record.material = Material::new(); // TODO: Figure out how to copy trait or something
                 return Some(hit_record);
             }
         }

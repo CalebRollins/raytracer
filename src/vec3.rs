@@ -21,20 +21,25 @@ impl Vec3 {
 
     pub fn one() -> Self {
         Self::new(1.0, 1.0, 1.0)
-	}
-	
-	pub fn random_in_unit_sphere() -> Self {
-		let mut p;
-		let mut rng = thread_rng();
-		loop {
-			p = 2.0*Self::new(rng.gen_range(0.0, 1.0), rng.gen_range(0.0, 1.0), rng.gen_range(0.0, 1.0)) - Self::one();
-			if p.squared_length() < 1.0 {
-				break;
-			}
-		}
+    }
 
-		p
-	}
+    pub fn random_in_unit_sphere() -> Self {
+        let mut p;
+        let mut rng = thread_rng();
+        loop {
+            p =
+                2.0 * Self::new(
+                    rng.gen_range(0.0, 1.0),
+                    rng.gen_range(0.0, 1.0),
+                    rng.gen_range(0.0, 1.0),
+                ) - Self::one();
+            if p.squared_length() < 1.0 {
+                break;
+            }
+        }
+
+        p
+    }
 
     pub fn x(&self) -> f32 {
         self[0]
