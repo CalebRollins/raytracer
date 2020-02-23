@@ -8,7 +8,6 @@ pub trait Material: DynClone {
     fn scatter(&self, r_in: &Ray, rec: &HitRecord) -> Option<Hit>;
 }
 
-// TODO: Return this instead of tuple
 pub struct Hit {
     pub scattered: Ray,
     pub attenuation: Vec3,
@@ -105,13 +104,13 @@ impl Material for Dielectric {
         }
 
         let reflect_prob;
-		let mut refracted = Vec3::zero();
-		if let Some(refract) = refract(&r_in.direction, &outward_normal, ni_over_nt) {
-			refracted = refract;
-			reflect_prob = schlick(cosine, self.ref_idx)
-		} else {
-			reflect_prob = 1.0;
-		};
+        let mut refracted = Vec3::zero();
+        if let Some(refract) = refract(&r_in.direction, &outward_normal, ni_over_nt) {
+            refracted = refract;
+            reflect_prob = schlick(cosine, self.ref_idx)
+        } else {
+            reflect_prob = 1.0;
+        };
 
         let mut rng = thread_rng();
         let reflected = reflect(&r_in.direction, &rec.normal);

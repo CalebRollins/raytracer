@@ -1,2 +1,2 @@
 Remove-Item *.ppm
-cargo run | Add-Content file.ppm
+cargo run | Add-Content out.ppm

@@ -1,26 +1,10 @@
-// #![warn(
-//     nonstandard_style,
-//     warnings,
-//     rust_2018_idioms,
-//     future_incompatible,
-//     clippy::all,
-//     clippy::restriction,
-//     clippy::pedantic,
-//     clippy::cargo
-// )]
-// #![allow(clippy::integer_arithmetic)]
-// #![allow(clippy::missing_inline_in_public_items)]
-// #![allow(clippy::multiple_crate_versions)]
-// #![allow(clippy::implicit_return)]
-
 mod vec3;
 use vec3::Vec3;
-mod ray;
-use ray::Ray;
 mod hittable;
+mod ray;
 use hittable::{Hittable, HittableList, Sphere};
 mod material;
-use material::{Dielectric, Lambertian, Material, Metal};
+use material::{Dielectric, Lambertian, Metal};
 mod camera;
 use camera::Camera;
 use rand::prelude::*;
@@ -66,8 +50,8 @@ fn main() {
             Box::new(one),
             Box::new(two),
             Box::new(three),
-			Box::new(four),
-			Box::new(five)
+            Box::new(four),
+            Box::new(five),
         ],
     };
 

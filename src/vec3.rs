@@ -4,7 +4,6 @@ use std::ops::{
 
 use rand::prelude::*;
 
-// TODO: Consider three separate variables instead of an array
 #[derive(Copy, Clone)]
 pub struct Vec3 {
     e: [f32; 3],
@@ -95,20 +94,7 @@ impl Vec3 {
     pub fn unit_vector(&self) -> Self {
         *self / self.length()
     }
-
-    // TODO: Will we need equivalents of these?
-    // 	inline std::istream& operator>>(std::istream &is, vec3 &t) {
-    //     is >> t.e[0] >> t.e[1] >> t.e[2];
-    //     return is;
-    // }
-
-    // inline std::ostream& operator<<(std::ostream &os, const vec3 &t) {
-    //     os << t.e[0] << " " << t.e[1] << " " << t.e[2];
-    //     return os;
-    // }
 }
-
-// TODO: See if we will actually need the unary positive sign, since there isn't a trait for this.
 
 impl Neg for Vec3 {
     type Output = Self;
