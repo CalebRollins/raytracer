@@ -10,52 +10,39 @@ use camera::Camera;
 use rand::prelude::*;
 
 fn main() {
-    let nx = 400;
-    let ny = 200;
+    let nx = 200;
+    let ny = 100;
     let ns = 100;
     println!("P3\r\n{} {}\r\n255", nx, ny);
-
+    let r = (std::f32::consts::PI / 4.0).cos();
     let one = Sphere {
-        center: Vec3::new(0.0, 0.0, -1.0),
-        radius: 0.5,
-        material: Lambertian::new(0.1, 0.2, 0.5),
+        center: Vec3::new(-r, 0.0, -1.0),
+        radius: r,
+        material: Lambertian::new(0.0, 0.0, 1.0),
     };
 
     let two = Sphere {
-        center: Vec3::new(0.0, -100.5, -1.0),
-        radius: 100.0,
-        material: Lambertian::new(0.8, 0.8, 0.0),
+        center: Vec3::new(r, 0.0, -1.0),
+        radius: r,
+        material: Lambertian::new(1.0, 0.0, 0.0),
     };
-
-    let three = Sphere {
-        center: Vec3::new(1.0, 0.0, -1.0),
-        radius: 0.5,
-        material: Metal::new(0.8, 0.6, 0.2, 0.3),
-    };
-
-    let four = Sphere {
-        center: Vec3::new(-1.0, 0.0, -1.0),
-        radius: 0.5,
-        material: Dielectric::new(1.5),
-    };
-
-    let five = Sphere {
-        center: Vec3::new(-1.0, 0.0, -1.0),
-        radius: -0.45,
-        material: Dielectric::new(1.5),
-    };
-
     let world = HittableList {
-        list: vec![
-            Box::new(one),
-            Box::new(two),
-            Box::new(three),
-            Box::new(four),
-            Box::new(five),
-        ],
+        list: vec![Box::new(one), Box::new(two)],
     };
 
-    let cam = Camera::new();
+    let look_from = Vec3::new(3.0, 3.0, 2.0);
+	let look_at = Vec3::new(0.0, 0.0, -1.0);
+	let dist_to_focus = (look_from - look_at).length();
+    let cam = Camera::new(
+		look_from,
+		look_at,
+		Vec3::new(0.0, 1.0, 0.0),
+		20.0,
+		nx as f32 / ny as f32,
+		2.0,
+		dist_to_focus
+	);
+
     let mut rng = thread_rng();
 
     for j in (0..ny).rev() {

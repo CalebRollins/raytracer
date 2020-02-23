@@ -1,9 +1,7 @@
 use super::material::{Lambertian, Material};
 use super::ray::Ray;
 use super::vec3::Vec3;
-// use crate::ray;
 
-// #[derive(Clone)]
 pub struct HitRecord {
     t: f32,
     pub p: Vec3,
