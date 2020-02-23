@@ -17,7 +17,7 @@ impl HitRecord {
             t: 0.0,
             p: Vec3::zero(),
             normal: Vec3::zero(),
-            material: Material::new(),
+            material: Lambertian::new(0.0, 0.0, 0.0),
         }
     }
 }
@@ -66,7 +66,7 @@ impl Hittable for Sphere {
                 hit_record.t = temp;
                 hit_record.p = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.p - self.center) / self.radius;
-                hit_record.material = Material::new(); // TODO: Figure out how to copy trait or something
+                hit_record.material = dyn_clone::clone_box(&*self.material);
                 return Some(hit_record);
             }
             let temp = (-b + discriminant.sqrt()) / a;
@@ -74,7 +74,7 @@ impl Hittable for Sphere {
                 hit_record.t = temp;
                 hit_record.p = r.point_at_parameter(hit_record.t);
                 hit_record.normal = (hit_record.p - self.center) / self.radius;
-                hit_record.material = Material::new(); // TODO: Figure out how to copy trait or something
+                hit_record.material = dyn_clone::clone_box(&*self.material);
                 return Some(hit_record);
             }
         }

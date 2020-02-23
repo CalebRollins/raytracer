@@ -20,7 +20,7 @@ use ray::Ray;
 mod hittable;
 use hittable::{Hittable, HittableList, Sphere};
 mod material;
-use material::Material;
+use material::{Lambertian, Material, Metal};
 mod camera;
 use camera::Camera;
 use rand::prelude::*;
@@ -31,26 +31,37 @@ fn main() {
     let ns = 100;
     println!("P3\r\n{} {}\r\n255", nx, ny);
 
-    let x = Sphere {
+    let one = Sphere {
         center: Vec3::new(0.0, 0.0, -1.0),
         radius: 0.5,
-        material: Material::new(),
+        material: Lambertian::new(0.8, 0.3, 0.3),
     };
 
-    let y = Sphere {
+    let two = Sphere {
         center: Vec3::new(0.0, -100.5, -1.0),
         radius: 100.0,
-        material: Material::new(),
+        material: Lambertian::new(0.8, 0.8, 0.0),
     };
 
-    let z = Sphere {
-        center: Vec3::new(0.0, -100.5, -1.0),
-        radius: 100.0,
-        material: Material::new(),
+    let three = Sphere {
+        center: Vec3::new(1.0, 0.0, -1.0),
+        radius: 0.5,
+        material: Metal::new(0.8, 0.6, 0.2, 0.3),
+    };
+
+    let four = Sphere {
+        center: Vec3::new(-1.0, 0.0, -1.0),
+        radius: 0.5,
+        material: Metal::new(0.8, 0.8, 0.8, 1.0),
     };
 
     let world = HittableList {
-        list: vec![Box::new(x), Box::new(y), Box::new(z)],
+        list: vec![
+            Box::new(one),
+            Box::new(two),
+            Box::new(three),
+            Box::new(four),
+        ],
     };
 
     let cam = Camera::new();
