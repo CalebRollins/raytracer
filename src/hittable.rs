@@ -1,6 +1,7 @@
-use super::material::{Lambertian, Material};
+use super::material::{Dielectric, Metal, Lambertian, Material};
 use super::ray::Ray;
 use super::vec3::Vec3;
+use rand::prelude::*;
 
 pub struct HitRecord {
     t: f32,
@@ -26,6 +27,69 @@ pub trait Hittable {
 
 pub struct HittableList {
     pub list: Vec<Box<dyn Hittable>>,
+}
+
+impl HittableList {
+    pub fn random_scene() -> Self {
+        let mut list: Vec<Box<dyn Hittable>> = Vec::new();
+		let zero = Sphere { center: Vec3::new(0.0, -1000.0, 0.0), radius: 1000.0, material: Lambertian::new(0.5, 0.5, 0.5), };
+		list.push(Box::new(zero));
+
+        for a in -5..5 {
+            for b in -5..5 {
+                let choose_mat = random::<f32>();
+                let center = Vec3::new(
+                    a as f32 + 0.9 * random::<f32>(),
+                    0.2,
+                    b as f32 + 0.9 * random::<f32>(),
+                );
+                if (center - Vec3::new(4.0, 0.2, 0.0)).length() > 0.9 {
+                    if choose_mat < 0.8 {
+						// diffuse
+						let sphere = Sphere {
+                            center,
+                            radius: 0.2,
+                            material: Lambertian::new(
+								random::<f32>() * random::<f32>(),
+								random::<f32>() * random::<f32>(),
+								random::<f32>() * random::<f32>() 
+							),
+                        };
+                        list.push(Box::new(sphere));
+                    } else if choose_mat < 0.95 {
+						// metal
+						let sphere = Sphere {
+                            center,
+                            radius: 0.2,
+                            material: Metal::new(
+								0.5 * (1.0 + random::<f32>()),
+								0.5 * (1.0 + random::<f32>()),
+								0.5 * (1.0 + random::<f32>()),
+								0.5 * random::<f32>(),
+							),
+                        };
+                        list.push(Box::new(sphere));
+					} else {
+						// glass
+						let sphere = Sphere {
+							center,
+							radius: 0.2,
+							material: Dielectric::new(1.5)
+						};
+						list.push(Box::new(sphere))
+					}
+                }
+            }
+		}
+		let one = Sphere { center: Vec3::new(0.0, 1.0, 0.0), radius: 1.0, material: Dielectric::new(1.5) };
+		list.push(Box::new(one));
+		let two= Sphere { center: Vec3::new(-4.0, 1.0, 0.0), radius: 1.0, material: Lambertian::new(0.4, 0.2, 0.1) };
+		list.push(Box::new(two));
+		let three= Sphere { center: Vec3::new(4.0, 1.0, 0.0), radius: 1.0, material: Metal::new(0.7, 0.6, 0.5, 0.0) };
+		list.push(Box::new(three));
+
+        HittableList { list }
+    }
 }
 
 impl Hittable for HittableList {

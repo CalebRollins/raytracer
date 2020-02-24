@@ -2,46 +2,34 @@ mod vec3;
 use vec3::Vec3;
 mod hittable;
 mod ray;
-use hittable::{Hittable, HittableList, Sphere};
+use hittable::{Hittable, HittableList};
 mod material;
-use material::{Dielectric, Lambertian, Metal};
 mod camera;
 use camera::Camera;
 use rand::prelude::*;
 
 fn main() {
-    let nx = 200;
-    let ny = 100;
+    let nx = 480 * 2;
+    let ny = 270 * 2;
     let ns = 100;
-    println!("P3\r\n{} {}\r\n255", nx, ny);
-    let r = (std::f32::consts::PI / 4.0).cos();
-    let one = Sphere {
-        center: Vec3::new(-r, 0.0, -1.0),
-        radius: r,
-        material: Lambertian::new(0.0, 0.0, 1.0),
-    };
+	println!("P3\r\n{} {}\r\n255", nx, ny);
 
-    let two = Sphere {
-        center: Vec3::new(r, 0.0, -1.0),
-        radius: r,
-        material: Lambertian::new(1.0, 0.0, 0.0),
-    };
-    let world = HittableList {
-        list: vec![Box::new(one), Box::new(two)],
-    };
+	let world = HittableList::random_scene();
 
-    let look_from = Vec3::new(3.0, 3.0, 2.0);
-	let look_at = Vec3::new(0.0, 0.0, -1.0);
-	let dist_to_focus = (look_from - look_at).length();
+    let look_from = Vec3::new(13., 2., 3.);
+    let look_at = Vec3::new(0., 0., 0.);
+    let up = Vec3::new(0., 1., 0.);
+    let dist_to_focus = 10.0;
+    let aperature = 0.1;
     let cam = Camera::new(
-		look_from,
-		look_at,
-		Vec3::new(0.0, 1.0, 0.0),
-		20.0,
-		nx as f32 / ny as f32,
-		2.0,
-		dist_to_focus
-	);
+        look_from,
+        look_at,
+        up,
+        20.0,
+        nx as f32 / ny as f32,
+        aperature,
+        dist_to_focus,
+    );
 
     let mut rng = thread_rng();
 
